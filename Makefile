@@ -32,10 +32,6 @@ build-zlib-linux: clean-zlib-linux
 	&& ./configure --prefix=$(build_dir_linux)/zlib \
 	&& make \
 	&& make install
-	cd src/$(zlib) \
-	&& ./configure \
-	&& make \
-	&& make install
 
 clean-libpng-linux:
 	rm -rf $(build_dir_linux)/libpng
