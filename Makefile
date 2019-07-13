@@ -1,31 +1,108 @@
 pwd = $(shell pwd)
+build_dir = $(pwd)/build/linux/
+dist_dir = $(pwd)/dist/linux/
+
+zlib = zlib-1.2.11
+libpng = libpng-1.6.37
+freetype = freetype-2.10.1
+harfbuzz = harfbuzz-2.5.3
+
+define freetype-ar-script
+create libfreetype.a
+addlib $(build_dir_linux)/zlib/lib/libz.a
+addlib $(build_dir_linux)/libpng/lib/libpng16.a
+addlib $(build_dir_linux)/freetype/lib/libfreetype.a
+save
+endef
+define freetypehb-ar-script
+create libfreetype.a
+addlib $(build_dir_linux)/zlib/lib/libz.a
+addlib $(build_dir_linux)/libpng/lib/libpng16.a
+addlib $(build_dir_linux)/harfbuzz/lib/libharfbuzz.a\n\
+addlib $(build_dir_linux)/freetype/lib/libfreetype.a
+save
+endef
 
 all: build
 
 clean-zlib-linux:
-	rm -rf build/linux/zlib
+	rm -rf $(build_dir_linux)/zlib
 build-zlib-linux: clean-zlib-linux
-	mkdir -p build/linux/zlib
+	mkdir -p $(build_dir_linux)/zlib
 	echo $(pwd)
-	cd src/zlib-1.2.11 \
-	&& ./configure --prefix=$(pwd)/build/linux/zlib \
+	cd src/$(zlib) \
+	&& ./configure --prefix=$(build_dir_linux)/zlib \
 	&& make \
 	&& make install
 
 clean-libpng-linux:
-	rm -rf build/linux/libpng
+	rm -rf $(build_dir_linux)/libpng
 build-libpng-linux: clean-libpng-linux
-	mkdir -p build/linux/libpng
-	cd src/libpng-1.6.37 \
-	&& LDFLAGS="-L$(pwd)/build/linux/zlib/lib" CPPFLAGS="-I $(pwd)/build/linux/zlib/include" ./configure \
-		--prefix=$(pwd)/build/linux/libpng \
+	mkdir -p $(build_dir_linux)/libpng
+	cd src/$(libpng) \
+	&& LDFLAGS="-L$(build_dir_linux)/zlib/lib" CPPFLAGS="-I $(build_dir_linux)/zlib/include" ./configure \
+		--prefix=$(build_dir_linux)/libpng \
 		--enable-static \
-		--with-zlib-prefix=$(pwd)/build/linux/zlib \
+		--with-zlib-prefix=$(build_dir_linux)/zlib \
 	&& make \
 	&& make install
 
-build-linux: build-zlib-linux build-libpng-linux
-	ls -la build/linux/zlib
-	ls -la build/linux/libpng
+clean-freetype-linux:
+	rm -rf $(build_dir_linux)/freetype
+build-freetype-linux: clean-freetype-linux
+	mkdir -p $(build_dir_linux)/freetype
+	cd src/$(freetype) \
+	&& PKG_CONFIG_LIBDIR=$(build_dir_linux)/zlib/lib/pkgconfig:$(build_dir_linux)/libpng/lib/pkgconfig ./configure \
+		--prefix=$(build_dir_linux)/freetype \
+		--enable-static \
+		--without-harfbuzz \
+		--without-bzip2 \
+    && make \
+    && make install
 
-build: build-linux
+clean-harfbuzz-linux:
+	rm -rf $(build_dir_linux)/harfbuzz
+build-harfbuzz-linux: clean-harfbuzz-linux
+	mkdir -p $(build_dir_linux)/harfbuzz
+	cd src/$(harfbuzz) \
+	&& PKG_CONFIG_LIBDIR=$(build_dir_linux)/zlib/lib/pkgconfig:$(build_dir_linux)/libpng/lib/pkgconfig:$(build_dir_linux)/freetype/lib/pkgconfig ./configure \
+		--prefix=$(build_dir_linux)/harfbuzz \
+		--enable-static \
+		--without-glib \
+		--without-gobject \
+		--without-cairo \
+		--without-fontconfig \
+		--without-icu \
+		--without-graphite2 \
+		--with-freetype \
+		--without-uniscribe \
+		--without-directwrite \
+		--without-coretext \
+    && make \
+    && make install
+
+clean-freetypehb-linux:
+	rm -rf $(build_dir_linux)/freetypehb
+build-freetypehb-linux: clean-freetypehb-linux
+	mkdir -p $(build_dir_linux)/freetypehb
+	cd src/$(freetype) \
+	&& PKG_CONFIG_LIBDIR=$(build_dir_linux)/zlib/lib/pkgconfig:$(build_dir_linux)/libpng/lib/pkgconfig:$(build_dir_linux)/harfbuzz/lib/pkgconfig ./configure \
+		--prefix=$(build_dir_linux)/freetypehb \
+		--enable-static \
+		--with-harfbuzz \
+		--without-bzip2 \
+    && make \
+    && make install
+
+build-linux: build-zlib-linux build-libpng-linux build-freetype build-harfbuzz-linux build-freetypehb-linux
+
+clean-dist-linux:
+	rm -rf $(dist_dir)
+dist-linux: clean-dist-linux
+ 	mkdir -p $(dist_dir)/lib
+    cp -r $(build_dir_linux)/freetype/include $(dist_dir)
+    cd $(dist_dir)/lib && echo $(freetype-ar-script) | ar -M 
+    cd $(dist_dir)/lib && echo $(freetypehb-ar-script) | ar -M 
+	ls -la $(dist_dir)
+	ls -la $(dist_dir)/include
+	ls -la $(dist_dir)/lib
