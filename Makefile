@@ -5,7 +5,7 @@ clean-zlib-linux:
 build-zlib-linux: clean-zlib-linux
 	mkdir -p build/linux/zlib
 	cd src/zlib-1.2.11
-	tree
+	ls -la
 	./configure --prefix=build/linux/zlib
 	make
 	make install
@@ -23,6 +23,7 @@ build-libpng-linux: clean-libpng-linux
 		&& make install
 
 build-linux: build-zlib-linux build-libpng-linux
-	tree build
+	ls -la build/linux/zlib
+	ls -la build/linux/libpng
 
 build: build-linux
