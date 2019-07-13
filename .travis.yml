@@ -10,4 +10,5 @@ addons:
     - make
     - pkg-config
 compiler: gcc
+before_script: sudo apt list --installed
 script: make dist-linux
