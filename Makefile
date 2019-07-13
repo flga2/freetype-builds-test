@@ -92,7 +92,7 @@ build-freetypehb-linux: clean-freetypehb-linux
 	&& make \
 	&& make install
 
-build-linux: build-zlib-linux build-libpng-linux build-freetype build-harfbuzz-linux build-freetypehb-linux
+build-linux: build-zlib-linux build-libpng-linux build-freetype-linux build-harfbuzz-linux build-freetypehb-linux
 
 clean-dist-linux:
 	rm -rf $(dist_dir_linux)
