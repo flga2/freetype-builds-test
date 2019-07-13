@@ -1,0 +1,10 @@
+language: C
+install:
+ - bzr
+ - procps
+ - g++
+ - gcc
+ - libc6-dev
+ - make
+ - pkg-config
+compiler: gcc
