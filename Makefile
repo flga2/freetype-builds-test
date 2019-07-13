@@ -1,9 +1,12 @@
+pwd = $(shell pwd)
+
 all: build
 
 clean-zlib-linux:
 	rm -rf build/linux/zlib
 build-zlib-linux: clean-zlib-linux
 	mkdir -p build/linux/zlib
+	echo $(pwd)
 	cd src/zlib-1.2.11 \
 	&& ./configure --prefix=$(pwd)/build/linux/zlib \
 	&& make \
