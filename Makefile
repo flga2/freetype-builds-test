@@ -57,8 +57,8 @@ build-freetype-linux: clean-freetype-linux
 		--enable-static \
 		--without-harfbuzz \
 		--without-bzip2 \
-    && make \
-    && make install
+	&& make \
+	&& make install
 
 clean-harfbuzz-linux:
 	rm -rf $(build_dir_linux)/harfbuzz
@@ -78,8 +78,8 @@ build-harfbuzz-linux: clean-harfbuzz-linux
 		--without-uniscribe \
 		--without-directwrite \
 		--without-coretext \
-    && make \
-    && make install
+	&& make \
+	&& make install
 
 clean-freetypehb-linux:
 	rm -rf $(build_dir_linux)/freetypehb
@@ -91,18 +91,18 @@ build-freetypehb-linux: clean-freetypehb-linux
 		--enable-static \
 		--with-harfbuzz \
 		--without-bzip2 \
-    && make \
-    && make install
+	&& make \
+	&& make install
 
 build-linux: build-zlib-linux build-libpng-linux build-freetype build-harfbuzz-linux build-freetypehb-linux
 
 clean-dist-linux:
 	rm -rf $(dist_dir)
 dist-linux: clean-dist-linux
- 	mkdir -p $(dist_dir)/lib
-    cp -r $(build_dir_linux)/freetype/include $(dist_dir)
-    cd $(dist_dir)/lib && echo $(freetype-ar-script) | ar -M 
-    cd $(dist_dir)/lib && echo $(freetypehb-ar-script) | ar -M 
+	mkdir -p $(dist_dir)/lib
+	cp -r $(build_dir_linux)/freetype/include $(dist_dir)
+	cd $(dist_dir)/lib && echo $(freetype-ar-script) | ar -M 
+	cd $(dist_dir)/lib && echo $(freetypehb-ar-script) | ar -M 
 	ls -la $(dist_dir)
 	ls -la $(dist_dir)/include
 	ls -la $(dist_dir)/lib
