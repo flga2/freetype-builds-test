@@ -3,15 +3,17 @@ all: build
 clean-zlib-linux:
 	rm -rf build/linux/zlib
 build-zlib-linux: clean-zlib-linux
+	mkdir -p build/linux/zlib
 	cd src/zlib-1.2.11
-	./configure \
-		--prefix=build/linux/zlib
+	tree
+	./configure --prefix=build/linux/zlib
 	make
 	make install
 
 clean-libpng-linux:
 	rm -rf build/linux/libpng
 build-libpng-linux: clean-libpng-linux
+	mkdir -p build/linux/libpng
 	cd src/libpng-1.6.37
 	LDFLAGS="-L/freetype2/build/zlib/lib" CPPFLAGS="-I /freetype2/build/zlib/include" ./configure \
 		--prefix=build/linux/libpng \
