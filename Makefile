@@ -63,6 +63,7 @@ clean-harfbuzz-linux:
 build-harfbuzz-linux: clean-harfbuzz-linux
 	mkdir -p $(build_dir_linux)/harfbuzz
 	cd src/$(harfbuzz) \
+	&& autoreconf --force --install \
 	&& PKG_CONFIG_LIBDIR=$(build_dir_linux)/zlib/lib/pkgconfig:$(build_dir_linux)/libpng/lib/pkgconfig:$(build_dir_linux)/freetype/lib/pkgconfig ./configure \
 		--prefix=$(build_dir_linux)/harfbuzz \
 		--enable-static \
