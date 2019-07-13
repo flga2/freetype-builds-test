@@ -38,7 +38,7 @@ clean-libpng-linux:
 build-libpng-linux: clean-libpng-linux
 	mkdir -p $(build_dir_linux)/libpng
 	cd src/$(libpng) \
-	&& LDFLAGS="-L$(build_dir_linux)/zlib/lib" CPPFLAGS="-I $(build_dir_linux)/zlib/include" ./configure \
+	&& PKG_CONFIG_LIBDIR=$(build_dir_linux)/zlib/lib/pkgconfig LDFLAGS="-L$(build_dir_linux)/zlib/lib" CPPFLAGS="-I $(build_dir_linux)/zlib/include" ./configure \
 		--prefix=$(build_dir_linux)/libpng \
 		--enable-static \
 		--with-zlib-prefix=$(build_dir_linux)/zlib \

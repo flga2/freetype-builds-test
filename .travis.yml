@@ -10,5 +10,4 @@ addons:
     - make
     - pkg-config
 compiler: gcc
-before_script: sudo apt-get remove -y --auto-remove zlib-bin zlib1g zlib1g-dev
 script: make dist-linux
