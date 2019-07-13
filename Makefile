@@ -7,14 +7,14 @@ libpng = libpng-1.6.37
 freetype = freetype-2.10.1
 harfbuzz = harfbuzz-2.5.3
 
-define freetype-ar-script
+define freetype_ar_script
 create libfreetype.a
 addlib $(build_dir_linux)/zlib/lib/libz.a
 addlib $(build_dir_linux)/libpng/lib/libpng16.a
 addlib $(build_dir_linux)/freetype/lib/libfreetype.a
 save
 endef
-define freetypehb-ar-script
+define freetypehb_ar_script
 create libfreetype.a
 addlib $(build_dir_linux)/zlib/lib/libz.a
 addlib $(build_dir_linux)/libpng/lib/libpng16.a
@@ -22,6 +22,8 @@ addlib $(build_dir_linux)/harfbuzz/lib/libharfbuzz.a\n\
 addlib $(build_dir_linux)/freetype/lib/libfreetype.a
 save
 endef
+export freetype_ar_script
+export freetypehb_ar_script
 
 clean-zlib-linux:
 	rm -rf $(build_dir_linux)/zlib
@@ -100,8 +102,8 @@ clean-dist-linux:
 dist-linux: build-linux clean-dist-linux
 	mkdir -p $(dist_dir_linux)/lib
 	cp -r $(build_dir_linux)/freetype/include $(dist_dir_linux)
-	cd $(dist_dir_linux)/lib && echo $(freetype-ar-script) | ar -M 
-	cd $(dist_dir_linux)/lib && echo $(freetypehb-ar-script) | ar -M 
+	cd $(dist_dir_linux)/lib && echo "$$freetype_ar_script" | ar -M
+	cd $(dist_dir_linux)/lib && echo "$$freetypehb_ar_script" | ar -M 
 	ls -la $(dist_dir_linux)
 	ls -la $(dist_dir_linux)/include
 	ls -la $(dist_dir_linux)/lib
