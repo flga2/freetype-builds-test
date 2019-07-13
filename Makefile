@@ -81,8 +81,8 @@ build-harfbuzz-linux: clean-harfbuzz-linux
 		--without-uniscribe \
 		--without-directwrite \
 		--without-coretext \
-	&& make \
-	&& make install
+	&& LD_LIBRARY_PATH=$(build_dir_linux)/zlib/lib:$(build_dir_linux)/libpng/lib:$(build_dir_linux)/freetype/lib make \
+	&& LD_LIBRARY_PATH=$(build_dir_linux)/zlib/lib:$(build_dir_linux)/libpng/lib:$(build_dir_linux)/freetype/lib make install
 
 clean-freetypehb-linux:
 	rm -rf $(build_dir_linux)/freetypehb
