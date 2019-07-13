@@ -98,7 +98,7 @@ build-linux: build-zlib-linux build-libpng-linux build-freetype build-harfbuzz-l
 
 clean-dist-linux:
 	rm -rf $(dist_dir)
-dist-linux: clean-dist-linux
+dist-linux: build-linux clean-dist-linux
 	mkdir -p $(dist_dir)/lib
 	cp -r $(build_dir_linux)/freetype/include $(dist_dir)
 	cd $(dist_dir)/lib && echo $(freetype-ar-script) | ar -M 
