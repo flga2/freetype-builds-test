@@ -10,5 +10,8 @@ addons:
     - make
     - pkg-config
     - automake
+    - autoconf
+    - m4
+    - perl
 compiler: gcc
 script: make dist-linux
