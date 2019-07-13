@@ -9,5 +9,6 @@ addons:
     - libc6-dev
     - make
     - pkg-config
+    - automake
 compiler: gcc
 script: make dist-linux
