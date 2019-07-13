@@ -5,7 +5,7 @@ clean-zlib-linux:
 build-zlib-linux: clean-zlib-linux
 	mkdir -p build/linux/zlib
 	cd src/zlib-1.2.11 \
-	&& ./configure --prefix=build/linux/zlib \
+	&& ./configure --prefix=$(pwd)/build/linux/zlib \
 	&& make \
 	&& make install
 
@@ -14,10 +14,10 @@ clean-libpng-linux:
 build-libpng-linux: clean-libpng-linux
 	mkdir -p build/linux/libpng
 	cd src/libpng-1.6.37 \
-	&& LDFLAGS="-L/freetype2/build/zlib/lib" CPPFLAGS="-I /freetype2/build/zlib/include" ./configure \
-		--prefix=build/linux/libpng \
+	&& LDFLAGS="-L$(pwd)/build/linux/zlib/lib" CPPFLAGS="-I $(pwd)/build/linux/zlib/include" ./configure \
+		--prefix=$(pwd)/build/linux/libpng \
 		--enable-static \
-		--with-zlib-prefix=build/linux/zlib \
+		--with-zlib-prefix=$(pwd)/build/linux/zlib \
 	&& make \
 	&& make install
 
