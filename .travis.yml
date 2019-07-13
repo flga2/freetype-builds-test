@@ -1,3 +1,4 @@
 language: C
-install: bzr procps g++ gcc libc6-dev make pkg-config
+before_install:
+  - sudo apt-get update && sudo apt-get install -y --no-install-recommends bzr procps g++ gcc libc6-dev make pkg-config
 compiler: gcc
