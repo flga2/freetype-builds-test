@@ -10,5 +10,6 @@ addons:
     - make
     - pkg-config
 compiler: gcc
-before_script: sudo apt list --installed
+before_script: apt-cache rdepends zlib1g
 script: make dist-linux
+
