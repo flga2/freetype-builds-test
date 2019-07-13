@@ -1,6 +1,6 @@
 pwd = $(shell pwd)
-build_dir = $(pwd)/build/linux/
-dist_dir = $(pwd)/dist/linux/
+build_dir_linux = $(pwd)/build/linux/
+dist_dir_linux = $(pwd)/dist/linux/
 
 zlib = zlib-1.2.11
 libpng = libpng-1.6.37
@@ -22,8 +22,6 @@ addlib $(build_dir_linux)/harfbuzz/lib/libharfbuzz.a\n\
 addlib $(build_dir_linux)/freetype/lib/libfreetype.a
 save
 endef
-
-all: build
 
 clean-zlib-linux:
 	rm -rf $(build_dir_linux)/zlib
@@ -97,12 +95,12 @@ build-freetypehb-linux: clean-freetypehb-linux
 build-linux: build-zlib-linux build-libpng-linux build-freetype build-harfbuzz-linux build-freetypehb-linux
 
 clean-dist-linux:
-	rm -rf $(dist_dir)
+	rm -rf $(dist_dir_linux)
 dist-linux: build-linux clean-dist-linux
-	mkdir -p $(dist_dir)/lib
-	cp -r $(build_dir_linux)/freetype/include $(dist_dir)
-	cd $(dist_dir)/lib && echo $(freetype-ar-script) | ar -M 
-	cd $(dist_dir)/lib && echo $(freetypehb-ar-script) | ar -M 
-	ls -la $(dist_dir)
-	ls -la $(dist_dir)/include
-	ls -la $(dist_dir)/lib
+	mkdir -p $(dist_dir_linux)/lib
+	cp -r $(build_dir_linux)/freetype/include $(dist_dir_linux)
+	cd $(dist_dir_linux)/lib && echo $(freetype-ar-script) | ar -M 
+	cd $(dist_dir_linux)/lib && echo $(freetypehb-ar-script) | ar -M 
+	ls -la $(dist_dir_linux)
+	ls -la $(dist_dir_linux)/include
+	ls -la $(dist_dir_linux)/lib
