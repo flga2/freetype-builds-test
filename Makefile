@@ -105,5 +105,5 @@ dist: build clean-dist
 	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
-test: dist
+test:
 	go run main.go $(version)
