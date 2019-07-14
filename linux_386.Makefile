@@ -40,11 +40,11 @@ clean-libpng:
 build-libpng: clean-libpng build-zlib
 	mkdir -p $(build)/libpng
 	cd src/$(libpng) \
-		&& LDFLAGS="-L$(build)/zlib/lib -lz" CPPFLAGS="-I $(build)/zlib/include -m32" ./configure \
+		&& LDFLAGS="-L$(build)/zlib/lib -lz" CFLAGS="-m32" CPPFLAGS="-I $(build)/zlib/include -m32" ./configure \
 			--prefix=$(build)/libpng \
 			--enable-static \
 			--with-zlib-prefix=$(build)/zlib \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib make \
+		&& LD_LIBRARY_PATH=$(build)/zlib/lib CFLAGS="-m32" CPPFLAGS="-m32" make \
 		&& make install
 
 clean-freetype:
