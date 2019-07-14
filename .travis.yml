@@ -11,6 +11,7 @@ addons:
     - pkg-config
 script:
   - make dist
-  - make test
+  - make test-ft
+  - make test-ft-hb
 
 
