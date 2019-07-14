@@ -13,12 +13,12 @@ addons:
     - make
     - pkg-config
 install: true
+env:
+  - GOOS=linux GOARCH=386
+  - GOOS=linux GOARCH=amd64
 script:
-  - make -f linux_386.Makefile dist
-  - make -f linux_386.Makefile test-ft
-  - make -f linux_386.Makefile test-ft-hb
-  # - make -f linux_amd64.Makefile dist
-  # - make -f linux_amd64.Makefile test-ft
-  # - make -f linux_amd64.Makefile test-ft-hb
+  - make -f $GOOS_$GOARCH.Makefile dist
+  - make -f $GOOS_$GOARCH.Makefile test-ft
+  - make -f $GOOS_$GOARCH.Makefile test-ft-hb race
 
 
