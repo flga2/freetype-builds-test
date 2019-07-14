@@ -9,6 +9,7 @@ addons:
     - libc6-dev
     - make
     - pkg-config
+install: true
 script:
   - make -f linux_amd64.Makefile dist
   - make -f linux_amd64.Makefile test-ft
