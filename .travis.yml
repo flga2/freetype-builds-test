@@ -17,7 +17,8 @@ addons:
     - make
     - pkg-config
   homebrew:
-    packages:
+   update: true
+   packages:
     - bzr
     - procps
     - g++
@@ -36,7 +37,6 @@ env:
     # - ARCH=linux_amd64
     # - ARCH=darwin_386
     - ARCH=darwin_amd64
-before_install: brew update
 script:
   - make -f $ARCH.Makefile dist
   - make -f $ARCH.Makefile test-ft
