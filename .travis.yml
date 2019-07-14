@@ -1,3 +1,7 @@
+os:
+  # - linux
+  - osx
+
 language: go
 addons:
   apt:
@@ -12,11 +16,25 @@ addons:
     - libc6-dev-i386
     - make
     - pkg-config
+  homebrew:
+    packages:
+    - bzr
+    - procps
+    - g++
+    - g++-multilib
+    - gcc
+    - gcc-multilib
+    - libc6-dev
+    - libc6-dev-i386
+    - make
+    - pkg-config
 install: true
 env:
   matrix:
-    - ARCH=linux_386
-    - ARCH=linux_amd64
+    # - ARCH=linux_386
+    # - ARCH=linux_amd64
+    # - ARCH=darwin_386
+    - ARCH=darwin_amd64
 script:
   - make -f $ARCH.Makefile dist
   - make -f $ARCH.Makefile test-ft
