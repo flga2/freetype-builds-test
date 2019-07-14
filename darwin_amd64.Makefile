@@ -1,5 +1,4 @@
 pwd = $(shell pwd)
-utilities = $(pwd)/utilities
 build = $(pwd)/build/darwin_amd64
 dist = $(pwd)/dist/darwin_amd64
 
@@ -8,32 +7,6 @@ freetype = freetype-$(version)
 zlib = zlib-1.2.11
 libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
-
-define freetype_ar_script
-create libfreetype_amd64.a
-addlib $(build)/zlib/lib/libz.a
-addlib $(build)/libpng/lib/libpng16.a
-addlib $(build)/freetype/lib/libfreetype.a
-save
-endef
-define freetypehb_ar_script
-create libfreetypehb_amd64.a
-addlib $(build)/zlib/lib/libz.a
-addlib $(build)/libpng/lib/libpng16.a
-addlib $(build)/harfbuzz/lib/libharfbuzz.a
-addlib $(build)/freetype/lib/libfreetype.a
-save
-endef
-export freetype_ar_script
-export freetypehb_ar_script
-
-binutils:
-	wget ftp://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.xz
-	tar -xf binutils-2.32.tar.xz
-	cd binutils-2.32 \
-		&& ./configure --prefix=$(utilities) \
-		&& make \
-		&& make install
 
 clean-zlib:
 	rm -rf $(build)/zlib
@@ -108,11 +81,18 @@ build: build-freetype build-freetypehb
 
 clean-dist:
 	rm -rf $(dist)
-dist: build clean-dist binutils
+dist: build clean-dist
 	mkdir -p $(dist)/lib
 	cp -r $(build)/freetype/include $(dist)
-	cd $(dist)/lib && echo "$$freetype_ar_script" | $(utilities)/bin/ar -M
-	cd $(dist)/lib && echo "$$freetypehb_ar_script" | $(utilities)/bin/ar -M 
+	libtool -static -o $(dist)/lib/libfreetype_amd64.a \
+		$(build)/zlib/lib/libz.a \
+		$(build)/libpng/lib/libpng16.a \
+		$(build)/freetype/lib/libfreetype.a
+	libtool -static -o $(dist)/lib/libfreetypehb_amd64.a \
+		$(build)/zlib/lib/libz.a \
+		$(build)/libpng/lib/libpng16.a \
+		$(build)/harfbuzz/lib/libharfbuzz.a \
+		$(build)/freetype/lib/libfreetype.a
 
 test-ft:
 	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build main_darwin_amd64.go
