@@ -9,6 +9,6 @@ addons:
     - libc6-dev
     - make
     - pkg-config
-script: make -f Makefile.linux dist
+script: make dist
 after_script: go run main.go
 
