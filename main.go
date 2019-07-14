@@ -1,7 +1,7 @@
 package main
 
-// #cgo CFLAGS: -I${SRCDIR}/dist/linux/include -I${SRCDIR}/dist/linux/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
-// #cgo LDFLAGS: -L${SRCDIR}/dist/linux/lib -lfreetype -lm
+// #cgo CFLAGS: -I${SRCDIR}/dist/include -I${SRCDIR}/dist/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo LDFLAGS: -L${SRCDIR}/dist/lib -lfreetype -lm
 import "C"
 import (
 	"fmt"
