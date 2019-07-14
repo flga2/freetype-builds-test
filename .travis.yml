@@ -1,4 +1,4 @@
-language: C
+language: go
 addons:
   apt:
     packages:
@@ -9,6 +9,5 @@ addons:
     - libc6-dev
     - make
     - pkg-config
-compiler: gcc
 script: make -f Makefile.linux dist
 
