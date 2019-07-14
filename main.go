@@ -44,6 +44,8 @@ func main() {
 		os.Exit(2)
 		return
 	}
+
+	fmt.Println("OK")
 }
 
 func parse(s string) (int, int, int, error) {

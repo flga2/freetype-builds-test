@@ -9,7 +9,6 @@ addons:
     - libc6-dev
     - make
     - pkg-config
-    - tree
 script: make dist
-after_script: tree dist && go run main.go 2.10.1
+after_script: go run main.go 2.10.1
 
