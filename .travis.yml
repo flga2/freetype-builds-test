@@ -20,6 +20,6 @@ env:
 script:
   - make -f $ARCH.Makefile dist
   - make -f $ARCH.Makefile test-ft
-  - make -f $ARCH.Makefile test-ft-hb race
+  - make -f $ARCH.Makefile test-ft-hb
 
 
