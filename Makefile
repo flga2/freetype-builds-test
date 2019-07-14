@@ -9,14 +9,14 @@ libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
 
 define freetype_ar_script
-create libfreetype.a
+create libfreetype_amd64.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
 addlib $(build)/freetype/lib/libfreetype.a
 save
 endef
 define freetypehb_ar_script
-create libfreetypehb.a
+create libfreetypehb_amd64.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
 addlib $(build)/harfbuzz/lib/libharfbuzz.a\n\
