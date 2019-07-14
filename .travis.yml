@@ -11,5 +11,5 @@ addons:
     - pkg-config
     - tree
 script: make dist
-after_script: tree dist && go run main.go
+after_script: tree dist && go run main.go 2.10.1
 
