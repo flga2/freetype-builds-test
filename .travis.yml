@@ -15,11 +15,11 @@ addons:
 install: true
 env:
   matrix:
-    - GOOS=linux GOARCH=386
-    - GOOS=linux GOARCH=amd64
+    - GOOSARCH=linux_386
+    - GOOSARCH=linux_amd64
 script:
-  - "make -f $GOOS_$GOARCH.Makefile dist"
-  - "make -f $GOOS_$GOARCH.Makefile test-ft"
-  - "make -f $GOOS_$GOARCH.Makefile test-ft-hb race"
+  - "make -f $GOOSARCH.Makefile dist"
+  - "make -f $GOOSARCH.Makefile test-ft"
+  - "make -f $GOOSARCH.Makefile test-ft-hb race"
 
 
