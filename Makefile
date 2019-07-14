@@ -2,9 +2,10 @@ pwd = $(shell pwd)
 build = $(pwd)/build
 dist = $(pwd)/dist
 
+version = 2.10.1
+freetype = freetype-$(version)
 zlib = zlib-1.2.11
 libpng = libpng-1.6.37
-freetype = freetype-2.10.1
 harfbuzz = harfbuzz-2.5.3
 
 define freetype_ar_script
@@ -103,6 +104,6 @@ dist: build clean-dist
 	cp -r $(build)/freetype/include $(dist)
 	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
-	ls -la $(dist)
-	ls -la $(dist)/include
-	ls -la $(dist)/lib
+
+test: dist
+	go run main.go $(version)

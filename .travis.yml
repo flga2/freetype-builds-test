@@ -9,6 +9,8 @@ addons:
     - libc6-dev
     - make
     - pkg-config
-script: make dist
-after_script: go run main.go 2.10.1
+script:
+  - make dist
+  - make test
+
 
