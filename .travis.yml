@@ -17,8 +17,8 @@ env:
   - GOOS=linux GOARCH=386
   - GOOS=linux GOARCH=amd64
 script:
-  - make -f $GOOS_$GOARCH.Makefile dist
-  - make -f $GOOS_$GOARCH.Makefile test-ft
-  - make -f $GOOS_$GOARCH.Makefile test-ft-hb race
+  - "make -f $GOOS_$GOARCH.Makefile dist"
+  - "make -f $GOOS_$GOARCH.Makefile test-ft"
+  - "make -f $GOOS_$GOARCH.Makefile test-ft-hb race"
 
 
