@@ -1,4 +1,5 @@
 pwd = $(shell pwd)
+utilities = $(pwd)/utilities
 build = $(pwd)/build/darwin_amd64
 dist = $(pwd)/dist/darwin_amd64
 
@@ -25,6 +26,14 @@ save
 endef
 export freetype_ar_script
 export freetypehb_ar_script
+
+binutils:
+	wget ftp://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.xz
+	tar -xf binutils-2.32.tar.xz
+	cd binutils-2.32 \
+		&& ./configure --prefix=$(utilities) \
+		&& make \
+		&& make install
 
 clean-zlib:
 	rm -rf $(build)/zlib
@@ -99,11 +108,11 @@ build: build-freetype build-freetypehb
 
 clean-dist:
 	rm -rf $(dist)
-dist: build clean-dist
+dist: build clean-dist binutils
 	mkdir -p $(dist)/lib
 	cp -r $(build)/freetype/include $(dist)
-	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
-	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
+	cd $(dist)/lib && echo "$$freetype_ar_script" | $(utilities)/bin/ar -M
+	cd $(dist)/lib && echo "$$freetypehb_ar_script" | $(utilities)/bin/ar -M 
 
 test-ft:
 	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build main_darwin_amd64.go

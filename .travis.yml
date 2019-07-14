@@ -29,7 +29,6 @@ addons:
     - libc6-dev-i386
     - make
     - pkg-config
-    - binutils
 install: true
 env:
   matrix:
@@ -37,7 +36,6 @@ env:
     # - ARCH=linux_amd64
     # - ARCH=darwin_386
     - ARCH=darwin_amd64
-before_script: brew install binutils
 script:
   - make -f $ARCH.Makefile dist
   - make -f $ARCH.Makefile test-ft
