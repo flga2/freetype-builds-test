@@ -14,9 +14,9 @@ addons:
     - pkg-config
 install: true
 script:
-  - make -f linux_386.Makefile dist
-  - make -f linux_386.Makefile test-ft
-  - make -f linux_386.Makefile test-ft-hb
+  # - make -f linux_386.Makefile dist
+  # - make -f linux_386.Makefile test-ft
+  # - make -f linux_386.Makefile test-ft-hb
   - make -f linux_amd64.Makefile dist
   - make -f linux_amd64.Makefile test-ft
   - make -f linux_amd64.Makefile test-ft-hb
