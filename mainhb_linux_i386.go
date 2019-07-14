@@ -1,7 +1,9 @@
+// +build linux,386
+
 package main
 
-// #cgo CFLAGS: -I${SRCDIR}/dist/include -I${SRCDIR}/dist/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
-// #cgo LDFLAGS: -L${SRCDIR}/dist/lib -lfreetype_amd64 -lm
+// #cgo CFLAGS: -I${SRCDIR}/dist/linux_386/include -I${SRCDIR}/dist/linux_386/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo LDFLAGS: -L${SRCDIR}/dist/linux_386/lib -lfreetypehb_386 -lm
 // #include <ft2build.h>
 // #include FT_FREETYPE_H
 import "C"
@@ -45,7 +47,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("FreeType OK")
+	fmt.Println("FreeTypeHB OK")
 }
 
 func parse(s string) (int, int, int, error) {

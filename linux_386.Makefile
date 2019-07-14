@@ -1,6 +1,6 @@
 pwd = $(shell pwd)
-build = $(pwd)/build
-dist = $(pwd)/dist
+build = $(pwd)/build/linux_386
+dist = $(pwd)/dist/linux_386
 
 version = 2.10.1
 freetype = freetype-$(version)
@@ -9,17 +9,17 @@ libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
 
 define freetype_ar_script
-create libfreetype_amd64.a
+create libfreetype_386.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
 addlib $(build)/freetype/lib/libfreetype.a
 save
 endef
 define freetypehb_ar_script
-create libfreetypehb_amd64.a
+create libfreetypehb_386.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
-addlib $(build)/harfbuzz/lib/libharfbuzz.a\n\
+addlib $(build)/harfbuzz/lib/libharfbuzz.a
 addlib $(build)/freetype/lib/libfreetype.a
 save
 endef
@@ -31,7 +31,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& ./configure --prefix=$(build)/zlib \
+		&& CFLAGS=-m32 ./configure --prefix=$(build)/zlib \
 		&& make \
 		&& make install
 
@@ -40,7 +40,7 @@ clean-libpng:
 build-libpng: clean-libpng build-zlib
 	mkdir -p $(build)/libpng
 	cd src/$(libpng) \
-		&& LDFLAGS="-L$(build)/zlib/lib" CPPFLAGS="-I $(build)/zlib/include" ./configure \
+		&& LDFLAGS="-L$(build)/zlib/lib" CFLAGS="-I $(build)/zlib/include -m32" ./configure \
 			--prefix=$(build)/libpng \
 			--enable-static \
 			--with-zlib-prefix=$(build)/zlib \
@@ -52,7 +52,7 @@ clean-freetype:
 build-freetype: clean-freetype build-libpng build-zlib
 	mkdir -p $(build)/freetype
 	cd src/$(freetype) \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig CFLAGS="-m32" ./configure \
 			--prefix=$(build)/freetype \
 			--enable-static \
 			--without-harfbuzz \
@@ -66,7 +66,7 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 	mkdir -p $(build)/harfbuzz
 	cd src/$(harfbuzz) \
 		&& autoreconf --force --install \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/freetype/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/freetype/lib/pkgconfig CFLAGS="-m32" CXXFLAGS="-m32" ./configure \
 			--prefix=$(build)/harfbuzz \
 			--enable-static \
 			--without-glib \
@@ -79,7 +79,7 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 			--without-uniscribe \
 			--without-directwrite \
 			--without-coretext \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib make \
+		&& CFLAGS="-m32" CXXFLAGS="-m32" LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib make \
 		&& make install
 
 clean-freetypehb:
@@ -87,7 +87,7 @@ clean-freetypehb:
 build-freetypehb: clean-freetypehb build-libpng build-zlib build-harfbuzz
 	mkdir -p $(build)/freetypehb
 	cd src/$(freetype) \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/harfbuzz/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/harfbuzz/lib/pkgconfig CFLAGS="-m32" ./configure \
 			--prefix=$(build)/freetypehb \
 			--enable-static \
 			--with-harfbuzz \
@@ -106,6 +106,8 @@ dist: build clean-dist
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
 test-ft:
-	go run main.go $(version)
+	CGO_ENABLED=1 GOOS=linux GOARCH=386 go build main_linux_386.go
+	./main_linux_386 $(version)
 test-ft-hb:
-	go run mainhb.go $(version)
+	CGO_ENABLED=1 GOOS=linux GOARCH=386 go build mainhb_linux_386.go
+	./mainhb_linux_386 $(version)
