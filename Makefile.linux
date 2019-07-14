@@ -1,6 +1,6 @@
 pwd = $(shell pwd)
-build = $(pwd)/build/linux
-dist = $(pwd)/dist/linux
+build = $(pwd)/build
+dist = $(pwd)/dist
 
 zlib = zlib-1.2.11
 libpng = libpng-1.6.37

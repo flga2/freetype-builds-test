@@ -10,4 +10,5 @@ addons:
     - make
     - pkg-config
 script: make -f Makefile.linux dist
+after_script: go run main.go
 
