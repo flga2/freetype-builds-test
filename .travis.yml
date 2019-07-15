@@ -38,6 +38,7 @@ script:
 - make -f $(go env GOHOSTOS)_${ARCH}.Makefile dist
 - make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft
 - make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft-hb
+before_deploy: cd ~
 deploy:
   provider: releases
   draft: true
