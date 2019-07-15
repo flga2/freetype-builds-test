@@ -12,6 +12,10 @@ package main
 // #cgo darwin,amd64,!harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_amd64/lib -lfreetype -lm
 // #cgo darwin,amd64,harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_amd64/lib -lfreetypehb -lm
 //
+// #cgo darwin,386 CFLAGS: -I${SRCDIR}/dist/darwin_386/include -I${SRCDIR}/dist/darwin_386/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo darwin,386,!harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_386/lib -lfreetype -lm
+// #cgo darwin,386,harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_386/lib -lfreetypehb -lm
+//
 // #include <ft2build.h>
 // #include FT_FREETYPE_H
 import "C"
