@@ -31,7 +31,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& CFLAGS=-m32 ./configure --prefix=$(build)/zlib \
+		&& CFLAGS=-m32 ./configure --prefix=$(build)/zlib --static \
 		&& make \
 		&& make install
 
@@ -43,6 +43,7 @@ build-libpng: clean-libpng build-zlib
 		&& LDFLAGS="-L$(build)/zlib/lib -lz" CFLAGS="-m32" CPPFLAGS="-I $(build)/zlib/include -m32" ./configure \
 			--prefix=$(build)/libpng \
 			--enable-static \
+			--disable-shared \
 			--with-zlib-prefix=$(build)/zlib \
 		&& LD_LIBRARY_PATH=$(build)/zlib/lib CFLAGS="-m32" CPPFLAGS="-m32" make \
 		&& make install
@@ -55,6 +56,7 @@ build-freetype: clean-freetype build-libpng build-zlib
 		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig CFLAGS="-m32" ./configure \
 			--prefix=$(build)/freetype \
 			--enable-static \
+			--disable-shared \
 			--without-harfbuzz \
 			--without-bzip2 \
 		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib make \
@@ -69,6 +71,7 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/freetype/lib/pkgconfig CFLAGS="-m32" CXXFLAGS="-m32" ./configure \
 			--prefix=$(build)/harfbuzz \
 			--enable-static \
+			--disable-shared \
 			--without-glib \
 			--without-gobject \
 			--without-cairo \
@@ -90,6 +93,7 @@ build-freetypehb: clean-freetypehb build-libpng build-zlib build-harfbuzz
 		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/harfbuzz/lib/pkgconfig CFLAGS="-m32" ./configure \
 			--prefix=$(build)/freetypehb \
 			--enable-static \
+			--disable-shared \
 			--with-harfbuzz \
 			--without-bzip2 \
 		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/harfbuzz/lib make \
