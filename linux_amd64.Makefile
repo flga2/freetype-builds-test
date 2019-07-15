@@ -106,8 +106,8 @@ dist: build clean-dist
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
 test-ft:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static.go
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static main.go
 	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" statichb.go
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" -o statichb main.go
 	./statichb $(version)
