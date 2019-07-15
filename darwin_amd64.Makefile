@@ -13,7 +13,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& ./configure --prefix=$(build)/zlib \
+		&& ./configure --prefix=$(build)/zlib --static \
 		&& make \
 		&& make install
 
@@ -93,6 +93,7 @@ dist: build clean-dist
 		$(build)/libpng/lib/libpng16.a \
 		$(build)/harfbuzz/lib/libharfbuzz.a \
 		$(build)/freetype/lib/libfreetype.a
+	zip -r darwin_amd64.zip $(dist)
 
 test-ft:
 	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static' -o static main.go

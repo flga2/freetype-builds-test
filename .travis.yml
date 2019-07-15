@@ -1,7 +1,6 @@
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 language: go
 addons:
   apt:
@@ -31,11 +30,20 @@ addons:
 install: true
 env:
   matrix:
-    - ARCH=386
-    - ARCH=amd64
+  - ARCH=386
+  - ARCH=amd64
 script:
-  - make -f $(go env GOHOSTOS)_${ARCH}.Makefile dist
-  - make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft
-  - make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft-hb
-
-
+- make -f $(go env GOHOSTOS)_${ARCH}.Makefile dist
+- make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft
+- make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft-hb
+deploy:
+  provider: releases
+  draft: true
+  overwrite: true
+  skip_cleanup: true
+  api_key:
+    secure: XtPTi/nfS8S9BdXqwenPPGV8DXofYij0MUNEzHcW/NK05TWXq/i7qMuVKNA389TTdhwxt36Xehimz/QqOzhj4RII0d2eBvfRST1+JrgqZEk6Xe9JVIgctCPeqEDRhBvKOTGraEE5EFxx8YuK2JTJ6n3T/mNs/QM9/4NX9nUYfFv/S2PZn2EHeYKZ8z2kTHLwKJtr5FKC7Nho5qADMk3gdHngEezpUL6RNd6RukBUGZDPB399aUeLb/tTkTOJPpHHQZe3BodkQE4Wt/PzbtBVbiFF2ErS+yhAVjRvHd2HHop7rMCmndrNpWrekaKzcNGLpM52H5NJ4+rpu5GyB0dNrAUyxKUUhiSI2KhNs4/Hbx6rE7Yn98Y7YPxKT0mW+jCCOVxFco32FSlNrqR14yuWjXKcudi4efU/zFQW+DgifnFWR7DEWkAr1c7nb/LgnQeRHDsX0x0vs8O5MbHvJL7/8VLKK2LnYFLlBJR/ucogmlrjwQZ3v9GqSCyTfz4UVWe9PMhIg5eHH1jdaPeZ6LVlmMf39lFn1KQypQaeXxmAZdwnG3uWxbqVWilDiRUoX7BSTmrLeNFa0GSCkn2G1B+tw6OhHDKGlYmINzKQXJle9mk0h+3GHPUDqdO/uRWAjC3aEdAI305t+q957ZpyB/bbDpxrr+ZB4VODpZ68D57jw1Q=
+  file: $(go env GOHOSTOS)_${ARCH}.zip
+  on:
+    repo: flga/freetype-builds-test
+    tags: true
