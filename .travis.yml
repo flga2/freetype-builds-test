@@ -42,6 +42,9 @@ before_deploy: cd ~
 deploy:
   provider: releases
   draft: true
+  name: FreeType $TRAVIS_TAG
+  body: hello
+  prerelease: true
   overwrite: true
   skip_cleanup: true
   api_key:
