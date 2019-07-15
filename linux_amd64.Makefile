@@ -106,7 +106,6 @@ dist: build clean-dist
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
 test-ft:
-go build 
 	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static.go
 	./static $(version)
 test-ft-hb:

@@ -17,8 +17,7 @@ addons:
     - make
     - pkg-config
   homebrew:
-  #  update: true
-   packages:
+    packages:
     - bzr
     - procps
     - g++
