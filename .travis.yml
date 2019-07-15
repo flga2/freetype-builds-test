@@ -1,5 +1,5 @@
 os:
-  # - linux
+  - linux
   - osx
 
 language: go
@@ -31,8 +31,6 @@ addons:
 install: true
 env:
   matrix:
-    # - ARCH=linux_386
-    # - ARCH=linux_amd64
     - ARCH=386
     - ARCH=amd64
 script:
