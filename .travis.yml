@@ -33,11 +33,11 @@ env:
   matrix:
     # - ARCH=linux_386
     # - ARCH=linux_amd64
-    - ARCH=darwin_386
-    - ARCH=darwin_amd64
+    - ARCH=386
+    - ARCH=amd64
 script:
-  - make -f $ARCH.Makefile dist
-  - make -f $ARCH.Makefile test-ft
-  - make -f $ARCH.Makefile test-ft-hb
+  - make -f ${GOHOSTOS}_${ARCH}.Makefile dist
+  - make -f ${GOHOSTOS}_${ARCH}.Makefile test-ft
+  - make -f ${GOHOSTOS}_${ARCH}.Makefile test-ft-hb
 
 
