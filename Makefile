@@ -1,17 +1,38 @@
 pwd = $(shell pwd)
-build = $(pwd)/build/darwin_$(ARCH)
-dist = $(pwd)/dist/darwin_$(ARCH)
+build = $(pwd)/build/$(OS)_$(ARCH)
+dist = $(pwd)/dist/$(OS)_$(ARCH)
 
 ifeq ("${ARCH}", "386")
 archflags = "-m32"
 endif
-
 
 version = 2.10.1
 freetype = freetype-$(version)
 zlib = zlib-1.2.11
 libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
+
+define freetype_ar_script
+create libfreetype.a
+addlib $(build)/zlib/lib/libz.a
+addlib $(build)/libpng/lib/libpng16.a
+addlib $(build)/freetype/lib/libfreetype.a
+save
+endef
+define freetypehb_ar_script
+create libfreetypehb.a
+addlib $(build)/zlib/lib/libz.a
+addlib $(build)/libpng/lib/libpng16.a
+addlib $(build)/harfbuzz/lib/libharfbuzz.a
+addlib $(build)/freetype/lib/libfreetype.a
+save
+endef
+export freetype_ar_script
+export freetypehb_ar_script
+
+ifeq ("${OS}", "$(OS)")
+goldflags = -ldflags "-linkmode external -extldflags -static"
+endif
 
 clean-zlib:
 	rm -rf $(build)/zlib
@@ -93,6 +114,11 @@ clean-dist:
 dist: build clean-dist
 	mkdir -p $(dist)/lib
 	cp -r $(build)/freetype/include $(dist)
+ifeq ("${OS}", "linux")
+	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
+	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
+endif
+ifeq ("${OS}", "darwin")
 	libtool -static -o $(dist)/lib/libfreetype.a \
 		$(build)/zlib/lib/libz.a \
 		$(build)/libpng/lib/libpng16.a \
@@ -102,11 +128,12 @@ dist: build clean-dist
 		$(build)/libpng/lib/libpng16.a \
 		$(build)/harfbuzz/lib/libharfbuzz.a \
 		$(build)/freetype/lib/libfreetype.a
-	cd $(dist) && zip -r $(HOME)/darwin_$(ARCH).zip .
+endif
+	cd $(dist) && zip -r $(HOME)/$(OS)_$(ARCH).zip .
 
 test-ft:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=$(ARCH) go build -tags 'static' -o static main.go
+	CGO_ENABLED=1 GOOS=$(OS) GOARCH=$(ARCH) go build -tags 'static' $(goldflags) -o static main.go
 	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=$(ARCH) go build -tags 'static harfbuzz' -o statichb main.go
+	CGO_ENABLED=1 GOOS=$(OS) GOARCH=$(ARCH) go build -tags 'static harfbuzz' $(goldflags) -o statichb main.go
 	./statichb $(version)
