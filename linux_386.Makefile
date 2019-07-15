@@ -104,7 +104,7 @@ dist: build clean-dist
 	cp -r $(build)/freetype/include $(dist)
 	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
-	zip -r linux_386.zip $(dist)
+	cd $(dist) && zip -r linux_386.zip .
 
 test-ft:
 	CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static main.go

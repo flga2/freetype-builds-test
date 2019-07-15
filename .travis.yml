@@ -32,6 +32,8 @@ env:
   matrix:
   - ARCH=386
   - ARCH=amd64
+matrix:
+  fast_finish: true
 script:
 - make -f $(go env GOHOSTOS)_${ARCH}.Makefile dist
 - make -f $(go env GOHOSTOS)_${ARCH}.Makefile test-ft
