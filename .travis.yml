@@ -1,6 +1,6 @@
 os:
-  - linux
-  # - osx
+  # - linux
+  - osx
 
 language: go
 addons:
@@ -31,10 +31,10 @@ addons:
 install: true
 env:
   matrix:
-    - ARCH=linux_386
-    - ARCH=linux_amd64
-    # - ARCH=darwin_386
-    # - ARCH=darwin_amd64
+    # - ARCH=linux_386
+    # - ARCH=linux_amd64
+    - ARCH=darwin_386
+    - ARCH=darwin_amd64
 script:
   - make -f $ARCH.Makefile dist
   - make -f $ARCH.Makefile test-ft
