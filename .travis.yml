@@ -35,7 +35,7 @@ env:
 matrix:
   fast_finish: true
 script:
-- make test-ft test-ft-hb OS=$(go env GOHOSTOS)
+- make dist test-ft test-ft-hb OS=$(go env GOHOSTOS)
 before_deploy: cd ~
 deploy:
   provider: releases
