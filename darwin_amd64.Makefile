@@ -95,8 +95,8 @@ dist: build clean-dist
 		$(build)/freetype/lib/libfreetype.a
 
 test-ft:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static main.go
+	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static' -o static main.go
 	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" -o statichb main.go
+	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static harfbuzz' -o statichb main.go
 	./statichb $(version)
