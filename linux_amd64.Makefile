@@ -31,7 +31,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& ./configure --prefix=$(build)/zlib --static \
+		&& ./configure --prefix=$(build)/zlib \
 		&& make \
 		&& make install
 

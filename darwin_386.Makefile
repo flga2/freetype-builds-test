@@ -13,7 +13,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& CFLAGS=-m32 ./configure --prefix=$(build)/zlib --static \
+		&& CFLAGS=-m32 ./configure --prefix=$(build)/zlib \
 		&& make \
 		&& make install
 
