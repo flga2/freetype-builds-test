@@ -93,7 +93,7 @@ dist: build clean-dist
 		$(build)/libpng/lib/libpng16.a \
 		$(build)/harfbuzz/lib/libharfbuzz.a \
 		$(build)/freetype/lib/libfreetype.a
-	cd $(dist) && zip -r darwin_386.zip .
+	cd $(dist) && zip -r $(HOME)/darwin_386.zip .
 
 test-ft:
 	CGO_ENABLED=1 GOOS=darwin GOARCH=386 go build -tags 'static' -o static main.go
