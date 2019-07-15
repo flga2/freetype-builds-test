@@ -2,7 +2,7 @@ pwd = $(shell pwd)
 build = $(pwd)/build/linux_$(ARCH)
 dist = $(pwd)/dist/linux_$(ARCH)
 
-ifeq (${ARCH}, "386")
+ifeq ("${ARCH}", "386")
 archflags = "-m32"
 endif
 

@@ -2,7 +2,7 @@ pwd = $(shell pwd)
 build = $(pwd)/build/darwin_$(ARCH)
 dist = $(pwd)/dist/darwin_$(ARCH)
 
-ifeq (${ARCH}, "386")
+ifeq ("${ARCH}", "386")
 archflags = "-m32"
 endif
 
