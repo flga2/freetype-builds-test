@@ -84,19 +84,19 @@ clean-dist:
 dist: build clean-dist
 	mkdir -p $(dist)/lib
 	cp -r $(build)/freetype/include $(dist)
-	libtool -static -o $(dist)/lib/libfreetype_amd64.a \
+	libtool -static -o $(dist)/lib/libfreetype.a \
 		$(build)/zlib/lib/libz.a \
 		$(build)/libpng/lib/libpng16.a \
 		$(build)/freetype/lib/libfreetype.a
-	libtool -static -o $(dist)/lib/libfreetypehb_amd64.a \
+	libtool -static -o $(dist)/lib/libfreetypehb.a \
 		$(build)/zlib/lib/libz.a \
 		$(build)/libpng/lib/libpng16.a \
 		$(build)/harfbuzz/lib/libharfbuzz.a \
 		$(build)/freetype/lib/libfreetype.a
 
 test-ft:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build main_darwin_amd64.go
-	./main_darwin_amd64 $(version)
+	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static.go
+	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build mainhb_darwin_amd64.go
-	./mainhb_darwin_amd64 $(version)
+	CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" statichb.go
+	./statichb $(version)

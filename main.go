@@ -1,9 +1,17 @@
-// +build darwin,amd64
-
 package main
 
-// #cgo CFLAGS: -I${SRCDIR}/dist/darwin_amd64/include -I${SRCDIR}/dist/darwin_amd64/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
-// #cgo LDFLAGS: -L${SRCDIR}/dist/darwin_amd64/lib -lfreetypehb_amd64 -lm
+// #cgo linux,386 CFLAGS: -I${SRCDIR}/dist/linux_386/include -I${SRCDIR}/dist/linux_386/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo linux,386,!harfbuzz LDFLAGS: -L${SRCDIR}/dist/linux_386/lib -lfreetype -lm
+// #cgo linux,386,harfbuzz LDFLAGS: -L${SRCDIR}/dist/linux_386/lib -lfreetypehb -lm
+//
+// #cgo linux,amd64 CFLAGS: -I${SRCDIR}/dist/linux_amd64/include -I${SRCDIR}/dist/linux_amd64/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo linux,amd64,!harfbuzz LDFLAGS: -L${SRCDIR}/dist/linux_amd64/lib -lfreetype -lm
+// #cgo linux,amd64,harfbuzz LDFLAGS: -L${SRCDIR}/dist/linux_amd64/lib -lfreetypehb -lm
+//
+// #cgo darwin,amd64 CFLAGS: -I${SRCDIR}/dist/darwin_amd64/include -I${SRCDIR}/dist/darwin_amd64/include/freetype2 -Werror -Wall -Wextra -Wno-unused-parameter
+// #cgo darwin,amd64,!harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_amd64/lib -lfreetype -lm
+// #cgo darwin,amd64,harfbuzz LDFLAGS: -L${SRCDIR}/dist/darwin_amd64/lib -lfreetypehb -lm
+//
 // #include <ft2build.h>
 // #include FT_FREETYPE_H
 import "C"
@@ -47,7 +55,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("FreeTypeHB OK")
+	fmt.Println("OK")
 }
 
 func parse(s string) (int, int, int, error) {

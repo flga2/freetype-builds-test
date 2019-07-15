@@ -9,14 +9,14 @@ libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
 
 define freetype_ar_script
-create libfreetype_amd64.a
+create libfreetype.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
 addlib $(build)/freetype/lib/libfreetype.a
 save
 endef
 define freetypehb_ar_script
-create libfreetypehb_amd64.a
+create libfreetypehb.a
 addlib $(build)/zlib/lib/libz.a
 addlib $(build)/libpng/lib/libpng16.a
 addlib $(build)/harfbuzz/lib/libharfbuzz.a
@@ -106,8 +106,9 @@ dist: build clean-dist
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
 test-ft:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build main_linux_amd64.go
-	./main_linux_amd64 $(version)
+go build 
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static.go
+	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build mainhb_linux_amd64.go
-	./mainhb_linux_amd64 $(version)
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" statichb.go
+	./statichb $(version)
