@@ -8,6 +8,24 @@ zlib = zlib-1.2.11
 libpng = libpng-1.6.37
 harfbuzz = harfbuzz-2.5.3
 
+define freetype_ar_script
+create libfreetype_amd64.a
+addlib $(build)/zlib/lib/libz.a
+addlib $(build)/libpng/lib/libpng16.a
+addlib $(build)/freetype/lib/libfreetype.a
+save
+endef
+define freetypehb_ar_script
+create libfreetypehb_amd64.a
+addlib $(build)/zlib/lib/libz.a
+addlib $(build)/libpng/lib/libpng16.a
+addlib $(build)/harfbuzz/lib/libharfbuzz.a
+addlib $(build)/freetype/lib/libfreetype.a
+save
+endef
+export freetype_ar_script
+export freetypehb_ar_script
+
 clean-zlib:
 	rm -rf $(build)/zlib
 build-zlib: clean-zlib
@@ -84,15 +102,8 @@ clean-dist:
 dist: build clean-dist
 	mkdir -p $(dist)/lib
 	cp -r $(build)/freetype/include $(dist)
-	libtool -static -o $(dist)/lib/libfreetype_amd64.a \
-		$(build)/zlib/lib/libz.a \
-		$(build)/libpng/lib/libpng16.a \
-		$(build)/freetype/lib/libfreetype.a
-	libtool -static -o $(dist)/lib/libfreetypehb_amd64.a \
-		$(build)/zlib/lib/libz.a \
-		$(build)/libpng/lib/libpng16.a \
-		$(build)/harfbuzz/lib/libharfbuzz.a \
-		$(build)/freetype/lib/libfreetype.a
+	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
+	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
 
 test-ft:
 	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build main_linux_amd64.go

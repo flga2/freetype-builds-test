@@ -16,7 +16,6 @@ addons:
     - libc6-dev-i386
     - make
     - pkg-config
-    - libtool-bin
   homebrew:
   #  update: true
    packages:
