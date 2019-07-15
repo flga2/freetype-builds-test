@@ -30,7 +30,7 @@ endef
 export freetype_ar_script
 export freetypehb_ar_script
 
-ifeq ("${OS}", "$(OS)")
+ifeq ("${OS}", "linux")
 goldflags = -ldflags "-linkmode external -extldflags -static"
 endif
 
