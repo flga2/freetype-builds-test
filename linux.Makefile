@@ -1,6 +1,10 @@
 pwd = $(shell pwd)
-build = $(pwd)/build/linux_amd64
-dist = $(pwd)/dist/linux_amd64
+build = $(pwd)/build/linux_$(ARCH)
+dist = $(pwd)/dist/linux_$(ARCH)
+
+ifeq (${ARCH}, "386")
+archflags = "-m32"
+endif
 
 version = 2.10.1
 freetype = freetype-$(version)
@@ -31,7 +35,7 @@ clean-zlib:
 build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
-		&& ./configure --prefix=$(build)/zlib --static \
+		&& CFLAGS=$(archflags) ./configure --prefix=$(build)/zlib --static \
 		&& make \
 		&& make install
 
@@ -40,12 +44,12 @@ clean-libpng:
 build-libpng: clean-libpng build-zlib
 	mkdir -p $(build)/libpng
 	cd src/$(libpng) \
-		&& LDFLAGS="-L$(build)/zlib/lib -lz" CPPFLAGS="-I $(build)/zlib/include" ./configure \
+		&& LDFLAGS="-L$(build)/zlib/lib -lz" CFLAGS=$(archflags) CPPFLAGS="-I $(build)/zlib/include $(archflags)" ./configure \
 			--prefix=$(build)/libpng \
 			--enable-static \
 			--disable-shared \
 			--with-zlib-prefix=$(build)/zlib \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib make \
+		&& LD_LIBRARY_PATH=$(build)/zlib/lib CFLAGS=$(archflags) CPPFLAGS=$(archflags) make \
 		&& make install
 
 clean-freetype:
@@ -53,7 +57,7 @@ clean-freetype:
 build-freetype: clean-freetype build-libpng build-zlib
 	mkdir -p $(build)/freetype
 	cd src/$(freetype) \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig CFLAGS=$(archflags) ./configure \
 			--prefix=$(build)/freetype \
 			--enable-static \
 			--disable-shared \
@@ -68,7 +72,7 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 	mkdir -p $(build)/harfbuzz
 	cd src/$(harfbuzz) \
 		&& autoreconf --force --install \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/freetype/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/freetype/lib/pkgconfig CFLAGS=$(archflags) CXXFLAGS=$(archflags) ./configure \
 			--prefix=$(build)/harfbuzz \
 			--enable-static \
 			--disable-shared \
@@ -82,7 +86,7 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 			--without-uniscribe \
 			--without-directwrite \
 			--without-coretext \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib make \
+		&& CFLAGS=$(archflags) CXXFLAGS=$(archflags) LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib make \
 		&& make install
 
 clean-freetypehb:
@@ -90,7 +94,7 @@ clean-freetypehb:
 build-freetypehb: clean-freetypehb build-libpng build-zlib build-harfbuzz
 	mkdir -p $(build)/freetypehb
 	cd src/$(freetype) \
-		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/harfbuzz/lib/pkgconfig ./configure \
+		&& PKG_CONFIG_LIBDIR=$(build)/zlib/lib/pkgconfig:$(build)/libpng/lib/pkgconfig:$(build)/harfbuzz/lib/pkgconfig CFLAGS=$(archflags) ./configure \
 			--prefix=$(build)/freetypehb \
 			--enable-static \
 			--disable-shared \
@@ -108,11 +112,11 @@ dist: build clean-dist
 	cp -r $(build)/freetype/include $(dist)
 	cd $(dist)/lib && echo "$$freetype_ar_script" | ar -M
 	cd $(dist)/lib && echo "$$freetypehb_ar_script" | ar -M 
-	cd $(dist) && zip -r $(HOME)/linux_amd64.zip .
+	cd $(dist) && zip -r $(HOME)/linux_$(ARCH).zip .
 
 test-ft:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static main.go
+	CGO_ENABLED=1 GOOS=linux GOARCH=$(ARCH) go build -tags 'static' -ldflags "-linkmode external -extldflags -static" -o static main.go
 	./static $(version)
 test-ft-hb:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" -o statichb main.go
+	CGO_ENABLED=1 GOOS=linux GOARCH=$(ARCH) go build -tags 'static harfbuzz' -ldflags "-linkmode external -extldflags -static" -o statichb main.go
 	./statichb $(version)
