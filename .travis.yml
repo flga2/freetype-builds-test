@@ -32,6 +32,9 @@ env:
   matrix:
   - ARCH=386
   - ARCH=amd64
+branches:
+  except:
+  - master
 matrix:
   fast_finish: true
 script:
