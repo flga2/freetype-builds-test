@@ -39,7 +39,7 @@ branches:
 matrix:
   fast_finish: true
 script:
-- make dist test-ft test-ft-hb OS=$(go env GOHOSTOS)
+- make.exe dist test-ft test-ft-hb OS=$(go env GOHOSTOS)
 before_deploy: cd ~
 deploy:
   provider: releases
