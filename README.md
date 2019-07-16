@@ -1,4 +1,4 @@
-# freetype-builds-test
+# freetype-builds-test [![Build Status](https://travis-ci.org/flga/freetype-builds-test.svg?branch=2.10.0)](https://travis-ci.org/flga/freetype-builds-test)
 test repository for pre-building freetype using travis
 
 This repo contains the sources "as-is" of the FreeType, harfbuzz, libpng and zlib projects, and all rights are reserved to the respective owners.
