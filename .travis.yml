@@ -1,7 +1,6 @@
 os:
-- windows
-# - linux
-# - osx
+- linux
+- osx
 language: go
 addons:
   apt:
@@ -31,7 +30,7 @@ addons:
 install: true
 env:
   matrix:
-  # - ARCH=386
+  - ARCH=386
   - ARCH=amd64
 branches:
   except:
@@ -39,7 +38,7 @@ branches:
 matrix:
   fast_finish: true
 script:
-- mingw32-make.exe dist test-ft test-ft-hb OS=$(go env GOHOSTOS)
+- make dist test-ft test-ft-hb OS=$(go env GOHOSTOS)
 before_deploy: cd ~
 deploy:
   provider: releases
