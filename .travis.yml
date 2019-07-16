@@ -1,6 +1,7 @@
 os:
-- linux
-- osx
+- windows
+# - linux
+# - osx
 language: go
 addons:
   apt:
@@ -30,7 +31,7 @@ addons:
 install: true
 env:
   matrix:
-  - ARCH=386
+  # - ARCH=386
   - ARCH=amd64
 branches:
   except:
