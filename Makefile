@@ -40,8 +40,8 @@ build-zlib: clean-zlib
 	mkdir -p $(build)/zlib
 	cd src/$(zlib) \
 		&& CFLAGS=$(archflags) ./configure --prefix=$(build)/zlib --static \
-		&& make \
-		&& make install
+		&& mingw32-make.exe \
+		&& mingw32-make.exe install
 
 clean-libpng:
 	rm -rf $(build)/libpng
@@ -53,8 +53,8 @@ build-libpng: clean-libpng build-zlib
 			--enable-static \
 			--disable-shared \
 			--with-zlib-prefix=$(build)/zlib \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib CFLAGS=$(archflags) CPPFLAGS=$(archflags) make \
-		&& make install
+		&& LD_LIBRARY_PATH=$(build)/zlib/lib CFLAGS=$(archflags) CPPFLAGS=$(archflags) mingw32-make.exe \
+		&& mingw32-make.exe install
 
 clean-freetype:
 	rm -rf $(build)/freetype
@@ -67,8 +67,8 @@ build-freetype: clean-freetype build-libpng build-zlib
 			--disable-shared \
 			--without-harfbuzz \
 			--without-bzip2 \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib make \
-		&& make install
+		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib mingw32-make.exe \
+		&& mingw32-make.exe install
 
 clean-harfbuzz:
 	rm -rf $(build)/harfbuzz
@@ -90,8 +90,8 @@ build-harfbuzz: clean-harfbuzz build-libpng build-zlib build-freetype
 			--without-uniscribe \
 			--without-directwrite \
 			--without-coretext \
-		&& CFLAGS=$(archflags) CXXFLAGS=$(archflags) LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib make \
-		&& make install
+		&& CFLAGS=$(archflags) CXXFLAGS=$(archflags) LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/freetype/lib mingw32-make.exe \
+		&& mingw32-make.exe install
 
 clean-freetypehb:
 	rm -rf $(build)/freetypehb
@@ -104,8 +104,8 @@ build-freetypehb: clean-freetypehb build-libpng build-zlib build-harfbuzz
 			--disable-shared \
 			--with-harfbuzz \
 			--without-bzip2 \
-		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/harfbuzz/lib make \
-		&& make install
+		&& LD_LIBRARY_PATH=$(build)/zlib/lib:$(build)/libpng/lib:$(build)/harfbuzz/lib mingw32-make.exe \
+		&& mingw32-make.exe install
 
 build: build-freetype build-freetypehb
 
